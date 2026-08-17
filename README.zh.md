@@ -61,6 +61,14 @@ dsh --profile web --dump-config   # 应看到 "# == dsh-plannotator"
 
 然后 `/plan`，等模型提出计划，在 Plannotator 里审。
 
+装好官方 CLI 后，这些是**终端子命令**。本插件不会把它们注册成 dsh 斜杠命令（没有 `/plannotator-review`）：
+
+| CLI | 打开什么 |
+| --- | --- |
+| `plannotator review [PR_URL]` | 审本地改动或 GitHub/GitLab PR |
+| `plannotator annotate <file\|url\|folder>` | 批注文档 |
+| `plannotator last` | 批注模型上一条消息 |
+
 ### 从本仓库安装
 
 ```bash
@@ -122,8 +130,8 @@ dsh plugin --profile web remove dsh-plannotator
 
 ## 本插件不会做的事
 
-- 改 Plannotator 主仓库（原生 `dsh` origin、`plan --gate --json`、安装器）
-- 提供斜杠命令（`/plannotator-review`、`/annotate`、`/last`）
+- 改 Plannotator 主仓库（原生 `dsh` origin、安装器）
+- 注册 dsh 斜杠命令。`review` / `annotate` / `last` 是上面官方 `plannotator` CLI 的子命令
 - 替换 `UserQuestionProvider` 或套用 Claude `hooks.json`
 
 ## 开发

@@ -61,6 +61,14 @@ dsh --profile web --dump-config   # look for "# == dsh-plannotator"
 
 Use `/plan`, let the agent propose a plan, and review it in Plannotator.
 
+Installing the official CLI also gives you these **terminal** subcommands. This plugin does not wrap them as dsh slash commands (`/plannotator-review` is not registered):
+
+| CLI | What it opens |
+| --- | --- |
+| `plannotator review [PR_URL]` | Code review of local changes or a GitHub/GitLab PR |
+| `plannotator annotate <file\|url\|folder>` | Annotate a document |
+| `plannotator last` | Annotate the last agent message |
+
 ### From this checkout
 
 ```bash
@@ -122,8 +130,8 @@ The child process always gets `PLANNOTATOR_ORIGIN=dsh` and `PLANNOTATOR_CWD=<ses
 
 ## What this plugin does not do
 
-- Change the Plannotator monorepo (native `dsh` origin, `plan --gate --json`, installer)
-- Add slash commands (`/plannotator-review`, `/annotate`, `/last`)
+- Change the Plannotator monorepo (native `dsh` origin, installer)
+- Register dsh slash commands. `review` / `annotate` / `last` belong to the official `plannotator` CLI above
 - Replace `UserQuestionProvider` or wrap Claude `hooks.json`
 
 ## Development
