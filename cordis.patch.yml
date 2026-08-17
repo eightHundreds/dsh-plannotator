@@ -1,0 +1,5 @@
+# Host-plane insert. Do not inject planMode here: on dsh web it lives in the
+# per-preset planning isolate, and a hard wait keeps the profile from booting.
+- insert:
+    - id: dsh-plannotator
+      name: dsh-plannotator
