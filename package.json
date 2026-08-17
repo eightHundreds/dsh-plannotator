@@ -1,6 +1,6 @@
 {
   "name": "dsh-plannotator",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Review the agent's plan in Plannotator — annotate, approve, or send it back.",
   "type": "module",
   "main": "lib/index.js",
