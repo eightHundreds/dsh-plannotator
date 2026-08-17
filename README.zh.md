@@ -6,9 +6,9 @@
 [![license](https://img.shields.io/npm/l/dsh-plannotator.svg)](./LICENSE)
 [![dsh-plugin](https://img.shields.io/badge/dsh-plugin-202724)](https://github.com/topics/dsh-plugin)
 
-独立的 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 插件。模型调用 `exit_plan_mode` 时，打开本机 [Plannotator](https://github.com/backnotprop/plannotator) 审阅界面，而不是 dsh 自带的审阅卡片。
+独立的 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 插件。代理写好计划后，打开的是官方 [Plannotator](https://plannotator.ai) 应用——真正的那个产品，不是聊天里另做的一套审阅。
 
-本仓库**不是**对 Plannotator 主仓库的 fork 或补丁。它调用你已经装好的 `plannotator` CLI。
+本仓库**不是**对 Plannotator 主仓库的 fork 或补丁。它用的是你已经装好的 Plannotator。
 
 ## 你会得到什么
 

@@ -6,9 +6,9 @@
 [![license](https://img.shields.io/npm/l/dsh-plannotator.svg)](./LICENSE)
 [![dsh-plugin](https://img.shields.io/badge/dsh-plugin-202724)](https://github.com/topics/dsh-plugin)
 
-Standalone [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin. When the agent calls `exit_plan_mode`, it opens [Plannotator](https://github.com/backnotprop/plannotator) instead of the native dsh review card.
+Standalone [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) plugin. When the agent is ready with a plan, it opens the official [Plannotator](https://plannotator.ai) app — the real product, not a lookalike review screen in the chat.
 
-This package is **not** a fork or patch of the Plannotator monorepo. It calls the `plannotator` CLI you already have installed.
+This package is **not** a fork or patch of the Plannotator monorepo. It uses the Plannotator app you already have installed.
 
 ## What you get
 
