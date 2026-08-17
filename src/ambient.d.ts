@@ -9,6 +9,8 @@ declare module "@deepseek-ai/cordis" {
     ): () => void;
     get(name: "planMode"): import("./types.js").PlanModeService | undefined;
     get(name: string): unknown;
+    inject(deps: string[], callback: (ctx: Context) => void): void;
+    commands?: import("./commands.js").CommandRegistry;
     logger?: {
       info?(...args: unknown[]): void;
       warn?(...args: unknown[]): void;

@@ -12,6 +12,9 @@ export interface PlanSessionEvent {
   type: string;
   data?: {
     active?: boolean;
+    message?: {
+      content?: unknown;
+    };
   };
 }
 

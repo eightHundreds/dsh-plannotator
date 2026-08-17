@@ -12,8 +12,18 @@ This package is **not** a fork or patch of the Plannotator monorepo. It uses the
 
 ## What you get
 
+When the agent presents a plan, Plannotator opens instead of the built-in review card.
+
+You can also open Plannotator yourself:
+
+| Command | What it does |
+| --- | --- |
+| `/plannotator-review` | Review the current changes, or a pull request if you paste a URL |
+| `/plannotator-annotate` | Annotate a file, folder, or URL |
+| `/plannotator-last` | Annotate the latest assistant reply |
+
 1. Enter plan mode with `/plan`.
-2. The agent writes a markdown plan and calls `exit_plan_mode`.
+2. The agent writes a plan.
 3. Plannotator opens in the browser. The native dsh card should not appear.
 4. Approve, deny, or dismiss. dsh stays in sync with that decision.
 

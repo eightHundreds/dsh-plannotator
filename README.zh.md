@@ -12,8 +12,18 @@
 
 ## 你会得到什么
 
+代理交出计划时，会打开 Plannotator，而不是 dsh 自带的审阅卡。
+
+也可以自己打开：
+
+| 命令 | 做什么 |
+| --- | --- |
+| `/plannotator-review` | 审当前改动；也可以贴一个 PR 链接 |
+| `/plannotator-annotate` | 批注一个文件、文件夹或网址 |
+| `/plannotator-last` | 批注代理上一条回复 |
+
 1. 用 `/plan` 进入计划模式。
-2. 模型写出 markdown 计划并调用 `exit_plan_mode`。
+2. 代理写出计划。
 3. 浏览器打开 Plannotator。原生 dsh 审阅卡片不应再出现。
 4. 批准、拒绝或关掉窗口。dsh 会按这个决定继续或留在计划模式。
 

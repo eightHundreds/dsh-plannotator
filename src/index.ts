@@ -1,4 +1,5 @@
 import type { Context } from "@deepseek-ai/cordis";
+import { registerPlannotatorCommands } from "./commands.js";
 import { throwDecision } from "./decision.js";
 import { openPlannotatorForAgent } from "./launch.js";
 import type { PlanAgent, PlanDecision, PlanModeService, ToolDispatchExecution } from "./types.js";
@@ -17,6 +18,10 @@ export const EXIT_PLAN_MODE = "exit_plan_mode";
 const HEADING_RE = /^#\s+\S/;
 
 export function apply(ctx: Context): void {
+  ctx.inject(["commands"], (commandCtx) => {
+    if (commandCtx.commands) registerPlannotatorCommands(commandCtx.commands);
+  });
+
   ctx.on("tools/execute", async (exec, next) => {
     const planMode = resolvePlanMode(ctx, exec.agent);
     if (!shouldInterceptExitPlanMode(exec, planMode)) return next();

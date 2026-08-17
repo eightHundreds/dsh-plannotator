@@ -49,6 +49,26 @@ export function openPlannotatorForAgent(
   return openPlannotator(plan, { cwd: sessionCwd(agent), signal });
 }
 
+export async function invokePlannotator(options: {
+  args: string[];
+  stdin?: string;
+  cwd?: string;
+  env?: NodeJS.ProcessEnv;
+  signal?: AbortSignal;
+}): Promise<{ stdout: string; stderr: string; exitCode: number | null }> {
+  const cwd = options.cwd ?? process.cwd();
+  const env = options.env ?? process.env;
+  const runtime = resolvePlannotatorCommand(env);
+  return runPlannotator({
+    command: runtime.command,
+    args: [...runtime.args, ...options.args],
+    cwd,
+    env: buildPlannotatorEnv(cwd, env),
+    stdin: options.stdin ?? "",
+    signal: options.signal,
+  });
+}
+
 interface RunOptions {
   command: string;
   args: string[];

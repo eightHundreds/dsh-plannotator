@@ -79,6 +79,7 @@ describe("apply", () => {
       | undefined;
     const ctx = {
       get: () => undefined,
+      inject() {},
       on(_name: string, listener: typeof handler) {
         handler = listener;
         return () => {};
