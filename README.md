@@ -92,15 +92,7 @@ A broken bundle patch can keep the whole `web` profile from booting. If `dsh web
 
 ## How it works
 
-The plugin injects only `tools` and listens on `tools/execute`.
-
-- If the tool is not `exit_plan_mode`, plan mode is inactive, or the plan does not start with a markdown heading (`# …`), it calls `next()` and leaves the official tool alone.
-- Otherwise it runs `plannotator opencode-plan`, writes `{ "plan": "<markdown>" }` to stdin, and reads the last JSON object on stdout (`{ "approved": true|false, "feedback": "..." }` or a `decision` field).
-- Approve returns `{ isError: false, value: { approved: true } }` so the official output schema still passes. Deny and dismiss throw the same Error strings as `@deepseek-ai/dsh-plan-mode`.
-
-It does **not** inject `planMode` on the host `--patch` row. On `dsh web` that service lives in the per-preset `planning` isolate; a hard inject waits forever and the profile never boots. The plugin reads `planMode` with `ctx.get('planMode')` when it is already available.
-
-It also does not monkey-patch `ctx.userQuestions.ask()`, register a second exit tool, or send Claude hook JSON.
+When the agent leaves plan mode, this plugin opens the official Plannotator app and waits. Approve, deny, or dismiss is then applied back in dsh. Anything else is left to the official tools.
 
 ## Configuration
 

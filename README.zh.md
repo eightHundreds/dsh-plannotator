@@ -92,15 +92,7 @@ dsh plugin --profile web remove dsh-plannotator
 
 ## 工作原理
 
-插件只 inject `tools`，挂在 `tools/execute` 上。
-
-- 工具不是 `exit_plan_mode`、当前不在计划模式、或计划不是以 markdown 标题（`# …`）开头时，直接 `next()`，交给官方实现。
-- 否则执行 `plannotator opencode-plan`，向 stdin 写入 `{ "plan": "<markdown>" }`，再读 stdout 里最后一个 JSON（`{ "approved": true|false, "feedback": "..." }` 或带 `decision` 字段）。
-- 批准返回 `{ isError: false, value: { approved: true } }`，满足官方 output schema。拒绝 / 关掉抛出与 `@deepseek-ai/dsh-plan-mode` 相同的 Error 文案。
-
-**不要**在宿主 `--patch` 行上硬 inject `planMode`。`dsh web` 里这个服务在 preset 的 `planning` 隔离组；硬等会让整个 profile 起不来。插件在服务已存在时用 `ctx.get('planMode')` 读取。
-
-插件也不劫持 `ctx.userQuestions.ask()`、不注册第二个退出工具、不伪造 Claude hook JSON。
+模型退出计划模式时，插件打开官方 Plannotator，等你审完。批准、拒绝或关掉会回写到 dsh；其余工具仍走官方实现。
 
 ## 配置
 
