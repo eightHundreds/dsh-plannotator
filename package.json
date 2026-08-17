@@ -1,7 +1,7 @@
 {
   "name": "dsh-plannotator",
   "version": "0.1.3",
-  "description": "Plannotator plan review for DeepSeek Harness — intercepts exit_plan_mode via tools/execute",
+  "description": "Review the agent's plan in Plannotator — annotate, approve, or send it back.",
   "type": "module",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
