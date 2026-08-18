@@ -79,6 +79,16 @@ dsh --profile web --dump-config   # 应看到 "# == dsh-plannotator"
 
 然后 `/plan`，等模型提出计划，在 Plannotator 里审。
 
+### 从 Release 压缩包安装
+
+每个 `v*` tag 会在 [GitHub Release](https://github.com/eightHundreds/dsh-plannotator/releases) 挂一份 `npm pack` 产物（`.tgz`）。这是官方的压缩包安装方式，不要用源码 zip：
+
+```bash
+# 从 Release 下载 dsh-plannotator-<version>.tgz 后：
+dsh plugin --profile web add ./dsh-plannotator-0.2.0.tgz
+dsh web
+```
+
 官方 CLI 里同样有这些**终端子命令**（`plannotator review` / `annotate` / `last`）。上面的斜杠命令是在 dsh 里对它们的包装。
 
 ### 从本仓库安装

@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing git tag to pack and attach (e.g. v0.2.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check tag matches package.json
+        env:
+          TAG_NAME: ${{ inputs.tag || github.ref_name }}
+        run: |
+          tag="${TAG_NAME#v}"
+          version="$(node -p "require('./package.json').version")"
+          if [ "$tag" != "$version" ]; then
+            echo "tag $TAG_NAME does not match package.json version $version"
+            exit 1
+          fi
+
+      - run: node --test
+
+      - name: Pack npm tarball
+        run: |
+          npm pack
+          tgz="$(ls dsh-plannotator-*.tgz)"
+          sha256sum "$tgz" | tee "${tgz}.sha256"
+
+      - name: Upload tarball to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag || github.ref_name }}
+          files: |
+            dsh-plannotator-*.tgz
+            dsh-plannotator-*.tgz.sha256
+          fail_on_unmatched_files: true
+          generate_release_notes: true

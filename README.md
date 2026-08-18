@@ -79,6 +79,16 @@ dsh --profile web --dump-config   # look for "# == dsh-plannotator"
 
 Use `/plan`, let the agent propose a plan, and review it in Plannotator.
 
+### From a release tarball
+
+Each `v*` tag publishes an npm pack (`.tgz`) on the [GitHub Release](https://github.com/eightHundreds/dsh-plannotator/releases). That is the official DSH archive install path — not a source zip:
+
+```bash
+# download dsh-plannotator-<version>.tgz from the release, then:
+dsh plugin --profile web add ./dsh-plannotator-0.2.0.tgz
+dsh web
+```
+
 The same flows are also available as official **terminal** subcommands (`plannotator review`, `plannotator annotate`, `plannotator last`). The slash commands above wrap those CLIs inside dsh.
 
 ### From this checkout
