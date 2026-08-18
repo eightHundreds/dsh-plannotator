@@ -79,12 +79,20 @@ dsh --profile web --dump-config   # 应看到 "# == dsh-plannotator"
 
 然后 `/plan`，等模型提出计划，在 Plannotator 里审。
 
-### 从 Release 压缩包安装
+### 从 `.tgz` 压缩包安装
 
-每个 `v*` tag 会在 [GitHub Release](https://github.com/eightHundreds/dsh-plannotator/releases) 挂一份 `npm pack` 产物（`.tgz`）。这是官方的压缩包安装方式，不要用源码 zip：
+每个 `v*` tag 会在 [GitHub Release](https://github.com/eightHundreds/dsh-plannotator/releases) 挂一份 `npm pack` 产物。`dsh plugin add` 可以直接吃这个 `.tgz`，和装 npm 包一样。不要用 Release 自动附带的源码 zip。
+
+用 Release URL 安装：
 
 ```bash
-# 从 Release 下载 dsh-plannotator-<version>.tgz 后：
+dsh plugin --profile web add https://github.com/eightHundreds/dsh-plannotator/releases/download/v0.2.0/dsh-plannotator-0.2.0.tgz
+dsh web
+```
+
+或先下载 `dsh-plannotator-<version>.tgz`，再指向本地文件：
+
+```bash
 dsh plugin --profile web add ./dsh-plannotator-0.2.0.tgz
 dsh web
 ```
@@ -125,7 +133,9 @@ dsh plugin --profile web remove dsh-plannotator
 
 ## 工作原理
 
-模型退出计划模式时，插件打开官方 Plannotator，等你审完。批准、拒绝或关掉会回写到 dsh；其余工具仍走官方实现。
+模型退出计划模式时，插件打开官方 Plannotator，等你审完。批准、拒绝或关掉会回写到 dsh。
+
+斜杠命令和面向模型的 skill 用 `ctx.inject(['commands'])` / `ctx.inject(['skills'])` 等对应服务 ACTIVE 后再注册，而不是在 `apply()` 里 `ctx.get` 一次就算了。包内 `skills/` 不会被 dsh 扫描，skill 正文是注册时嵌进去的。
 
 ## 配置
 
@@ -148,6 +158,8 @@ dsh plugin --profile web remove dsh-plannotator
 | 现象 | 检查 |
 | --- | --- |
 | 仍然弹出原生 dsh 审阅卡片 | `--dump-config` 里没有本插件、当前不在计划模式、或计划不是以 `# …` 开头。 |
+| `/` 菜单里没有 `/plannotator-*` | profile 还在用已发布的 `0.1.4`（那一版什么都没注册）。用本仓库重装：`dsh plugin --profile web add .` |
+| skill 目录里没有 `plannotator` | 同上，或宿主没有 `skills` 服务。包内 `skills/` 不会被自动扫描。 |
 | `Could not find \`plannotator\`` | 先装 CLI，或设置 `PLANNOTATOR_BIN`。 |
 | 装完后 `dsh web` 起不来 | 卸掉插件。不要在宿主 patch 上硬 `inject: ['planMode']`。 |
 | `exit_plan_mode is only available in plan mode` | 旧版本返回了裸的 `{ approved: true }`，过不了官方 schema。升级本插件。 |

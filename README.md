@@ -79,12 +79,20 @@ dsh --profile web --dump-config   # look for "# == dsh-plannotator"
 
 Use `/plan`, let the agent propose a plan, and review it in Plannotator.
 
-### From a release tarball
+### From a `.tgz` tarball
 
-Each `v*` tag publishes an npm pack (`.tgz`) on the [GitHub Release](https://github.com/eightHundreds/dsh-plannotator/releases). That is the official DSH archive install path — not a source zip:
+Each `v*` tag publishes an npm pack on the [GitHub Release](https://github.com/eightHundreds/dsh-plannotator/releases). `dsh plugin add` accepts that `.tgz` the same way it accepts an npm package — do not use the auto-attached source zip.
+
+Install from the release URL:
 
 ```bash
-# download dsh-plannotator-<version>.tgz from the release, then:
+dsh plugin --profile web add https://github.com/eightHundreds/dsh-plannotator/releases/download/v0.2.0/dsh-plannotator-0.2.0.tgz
+dsh web
+```
+
+Or download `dsh-plannotator-<version>.tgz` first, then point at the file:
+
+```bash
 dsh plugin --profile web add ./dsh-plannotator-0.2.0.tgz
 dsh web
 ```
@@ -125,7 +133,9 @@ A broken bundle patch can keep the whole `web` profile from booting. If `dsh web
 
 ## How it works
 
-When the agent leaves plan mode, this plugin opens the official Plannotator app and waits. Approve, deny, or dismiss is then applied back in dsh. Anything else is left to the official tools.
+When the agent leaves plan mode, this plugin opens the official Plannotator app and waits. Approve, deny, or dismiss is then applied back in dsh.
+
+Slash commands and the model-facing skill are registered with `ctx.inject(['commands'])` / `ctx.inject(['skills'])` once those host services are active. They are not a one-shot `ctx.get` at plugin load, and the package `skills/` directory is not scanned by dsh — the skill body is embedded at register time.
 
 ## Configuration
 
@@ -148,6 +158,8 @@ The child process always gets `PLANNOTATOR_ORIGIN=dsh` and `PLANNOTATOR_CWD=<ses
 | Symptom | What to check |
 | --- | --- |
 | Native dsh review card still appears | Plugin layer missing in `--dump-config`, plan mode not active, or the plan does not start with `# …`. |
+| `/plannotator-*` missing from the slash menu | Profile still has published `0.1.4` (that build registered nothing). Re-add this checkout: `dsh plugin --profile web add .` |
+| `plannotator` skill missing from the catalog | Same as above, or the host has no `skills` service. The package `skills/` folder is not auto-discovered. |
 | `Could not find \`plannotator\`` | Install the CLI, or set `PLANNOTATOR_BIN`. |
 | `dsh web` never boots after install | Remove the plugin. Do not add a hard `inject: ['planMode']` to the host patch. |
 | `exit_plan_mode is only available in plan mode` | Older builds returned a bare `{ approved: true }` and failed the official schema. Upgrade this plugin. |
