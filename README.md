@@ -10,6 +10,14 @@ Standalone [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) p
 
 This package is **not** a fork or patch of the Plannotator monorepo. It uses the Plannotator app you already have installed.
 
+Layout follows [dsh-plugin-starter](https://github.com/ciceroyang/dsh-plugin-starter): host plugin, pure `lib/` helpers, runtime skill, `node:test`, CI, and a bundle manifest — zero dependencies, no build step.
+
+    index.js                    host plugin (plan intercept + commands + skill)
+    lib/                        deterministic helpers (unit-test friendly)
+    skills/plannotator/SKILL.md model-facing skill manual
+    tests/                      node:test suite
+    cordis.patch.yml            bundle patch layer
+
 ## What you get
 
 When the agent presents a plan, Plannotator opens instead of the built-in review card.
@@ -37,7 +45,7 @@ You can also open Plannotator yourself:
 ## Requirements
 
 - [dsh](https://github.com/deepseek-ai/deepseek-harness) `0.1.0-rc.6` or a compatible developer preview
-- Node.js 22+
+- Node.js 18+ (dsh itself still wants 22+)
 - A `plannotator` CLI that already ships `plannotator opencode-plan` (current releases do)
 
 Install the CLI if it is missing:
@@ -71,26 +79,31 @@ dsh --profile web --dump-config   # look for "# == dsh-plannotator"
 
 Use `/plan`, let the agent propose a plan, and review it in Plannotator.
 
-Installing the official CLI also gives you these **terminal** subcommands. This plugin does not wrap them as dsh slash commands (`/plannotator-review` is not registered):
-
-| CLI | What it opens |
-| --- | --- |
-| `plannotator review [PR_URL]` | Code review of local changes or a GitHub/GitLab PR |
-| `plannotator annotate <file\|url\|folder>` | Annotate a document |
-| `plannotator last` | Annotate the last agent message |
+The same flows are also available as official **terminal** subcommands (`plannotator review`, `plannotator annotate`, `plannotator last`). The slash commands above wrap those CLIs inside dsh.
 
 ### From this checkout
 
 ```bash
 git clone https://github.com/eightHundreds/dsh-plannotator.git
 cd dsh-plannotator
-pnpm install
-pnpm build
 dsh plugin --profile web add .
 dsh web
 ```
 
-Rebuild after changing the TypeScript sources. A local `dsh plugin add .` stays linked to this checkout.
+No install or build step. A local `dsh plugin add .` stays linked to this checkout.
+
+Dev-load with a `--patch` overlay (plugin path must be absolute):
+
+```yaml
+# dev.cordis.yml
+- insert:
+    - id: dsh-plannotator
+      name: /absolute/path/to/dsh-plannotator/index.js
+```
+
+```bash
+dsh --profile web --patch ./dev.cordis.yml
+```
 
 ## Uninstall
 
@@ -133,17 +146,18 @@ The child process always gets `PLANNOTATOR_ORIGIN=dsh` and `PLANNOTATOR_CWD=<ses
 ## What this plugin does not do
 
 - Change the Plannotator monorepo (native `dsh` origin, installer)
-- Register dsh slash commands. `review` / `annotate` / `last` belong to the official `plannotator` CLI above
 - Replace `UserQuestionProvider` or wrap Claude `hooks.json`
 
 ## Development
 
 ```bash
-pnpm install
-pnpm test
-pnpm typecheck
-pnpm build
+node --test
 ```
+
+## References
+
+- [dsh-plugin-starter](https://github.com/ciceroyang/dsh-plugin-starter)
+- Field guide: https://github.com/ciceroyang/dsh-report-studio/blob/main/docs/tutorial-zh.md
 
 ## License
 

@@ -1,5 +1,6 @@
-# Host-plane insert. Do not inject planMode here: on dsh web it lives in the
-# per-preset planning isolate, and a hard wait keeps the profile from booting.
+# dsh-plannotator bundle patch layer — applied to any profile listing this bundle.
+# Do not inject planMode here: on dsh web it lives in the per-preset planning
+# isolate, and a hard wait keeps the profile from booting.
 - insert:
     - id: dsh-plannotator
       name: dsh-plannotator

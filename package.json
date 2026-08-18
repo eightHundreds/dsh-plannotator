@@ -1,32 +1,20 @@
 {
   "name": "dsh-plannotator",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "Opens the official Plannotator app to review the agent's plan — annotate, approve, or send it back.",
   "type": "module",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./lib/index.d.ts",
-      "import": "./lib/index.js",
-      "default": "./lib/index.js"
-    },
-    "./package.json": "./package.json"
-  },
+  "main": "index.js",
   "files": [
-    "lib/**/*.js",
-    "lib/**/*.d.ts",
+    "index.js",
+    "lib",
+    "skills",
     "cordis.patch.yml",
     "README.md",
     "README.zh.md",
     "LICENSE"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "prepare": "tsc -p tsconfig.json",
-    "prepublishOnly": "tsc -p tsconfig.json",
-    "test": "vitest run",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "test": "node --test"
   },
   "keywords": [
     "dsh",
@@ -46,7 +34,7 @@
     "url": "https://github.com/eightHundreds/dsh-plannotator/issues"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=18"
   },
   "dsh": {
     "bundle": {
@@ -57,16 +45,15 @@
     "@deepseek-ai/cordis": ">=4.0.0-rc.0 <5",
     "@deepseek-ai/dsh-llm": ">=0.0.1-rc.0 <1",
     "@deepseek-ai/dsh-plan-mode": ">=0.0.1-rc.0 <1",
+    "@deepseek-ai/dsh-skill": "*",
     "@deepseek-ai/dsh-tools": ">=0.0.1-rc.0 <1"
   },
   "peerDependenciesMeta": {
     "@deepseek-ai/dsh-llm": {
       "optional": true
+    },
+    "@deepseek-ai/dsh-skill": {
+      "optional": true
     }
-  },
-  "devDependencies": {
-    "@types/node": "^22.15.0",
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.4"
   }
 }

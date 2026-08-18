@@ -10,6 +10,14 @@
 
 本仓库**不是**对 Plannotator 主仓库的 fork 或补丁。它用的是你已经装好的 Plannotator。
 
+工程结构按 [dsh-plugin-starter](https://github.com/ciceroyang/dsh-plugin-starter)：宿主插件、纯函数 `lib/`、运行时 skill、`node:test`、CI、bundle 清单。零依赖，免构建。
+
+    index.js                    宿主插件：计划拦截 + 斜杠命令 + skill
+    lib/                        纯函数（可单测，不依赖 harness 服务）
+    skills/plannotator/SKILL.md 技能说明书（模型视角）
+    tests/                      node:test 单测
+    cordis.patch.yml            bundle patch 层
+
 ## 你会得到什么
 
 代理交出计划时，会打开 Plannotator，而不是 dsh 自带的审阅卡。
@@ -37,7 +45,7 @@
 ## 依赖
 
 - [dsh](https://github.com/deepseek-ai/deepseek-harness) `0.1.0-rc.6` 或兼容的 developer preview
-- Node.js 22+
+- Node.js 18+（dsh 宿主本身仍需要 22+）
 - 已带 `plannotator opencode-plan` 的 `plannotator` CLI（当前发行版都有）
 
 没有 CLI 时先装：
@@ -71,26 +79,31 @@ dsh --profile web --dump-config   # 应看到 "# == dsh-plannotator"
 
 然后 `/plan`，等模型提出计划，在 Plannotator 里审。
 
-装好官方 CLI 后，这些是**终端子命令**。本插件不会把它们注册成 dsh 斜杠命令（没有 `/plannotator-review`）：
-
-| CLI | 打开什么 |
-| --- | --- |
-| `plannotator review [PR_URL]` | 审本地改动或 GitHub/GitLab PR |
-| `plannotator annotate <file\|url\|folder>` | 批注文档 |
-| `plannotator last` | 批注模型上一条消息 |
+官方 CLI 里同样有这些**终端子命令**（`plannotator review` / `annotate` / `last`）。上面的斜杠命令是在 dsh 里对它们的包装。
 
 ### 从本仓库安装
 
 ```bash
 git clone https://github.com/eightHundreds/dsh-plannotator.git
 cd dsh-plannotator
-pnpm install
-pnpm build
 dsh plugin --profile web add .
 dsh web
 ```
 
-改 TypeScript 源码后需要重新 `pnpm build`。本地 `dsh plugin add .` 会继续链到这个 checkout。
+不用 `pnpm install`，也不用构建。本地 `dsh plugin add .` 会继续链到这个 checkout。
+
+用 `--patch` 覆盖层开发加载（插件路径必须绝对）：
+
+```yaml
+# dev.cordis.yml
+- insert:
+    - id: dsh-plannotator
+      name: /绝对路径/dsh-plannotator/index.js
+```
+
+```bash
+dsh --profile web --patch ./dev.cordis.yml
+```
 
 ## 卸载
 
@@ -133,17 +146,18 @@ dsh plugin --profile web remove dsh-plannotator
 ## 本插件不会做的事
 
 - 改 Plannotator 主仓库（原生 `dsh` origin、安装器）
-- 注册 dsh 斜杠命令。`review` / `annotate` / `last` 是上面官方 `plannotator` CLI 的子命令
 - 替换 `UserQuestionProvider` 或套用 Claude `hooks.json`
 
 ## 开发
 
 ```bash
-pnpm install
-pnpm test
-pnpm typecheck
-pnpm build
+node --test
 ```
+
+## 参考
+
+- [dsh-plugin-starter](https://github.com/ciceroyang/dsh-plugin-starter)
+- 实战教程：https://github.com/ciceroyang/dsh-report-studio/blob/main/docs/tutorial-zh.md
 
 ## 许可
 
